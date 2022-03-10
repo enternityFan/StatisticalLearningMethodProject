@@ -21,7 +21,7 @@ def create_data():
         if data[i,-1] == 0:
             data[i,-1] = -1
     # print(data)
-    return data[:,:2], data[:,-1]
+    return data[:,:-1], data[:,-1]
 
 class AdaBoost:
     def __init__(self, n_estimators=50, learning_rate=1.0):
@@ -122,6 +122,8 @@ class AdaBoost:
         for epoch in range(self.clf_num):
             best_clf_error, best_v, clf_result = 100000, None, None
             # 根据特征维度, 选择误差最小的
+            axis = 0
+            final_direct = ''
             for j in range(self.N):
                 features = self.X[:, j]
                 # 分类阈值，分类误差，分类结果
@@ -175,14 +177,9 @@ class AdaBoost:
 
 
 
-
-
-
-
-
 if __name__ == "__main__":
     X, y = create_data()
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-    clf = AdaBoost(n_estimators=3,learning_rate=0.5)
-    clf.fit(X,y)
-    print(clf.score(X_test,y_test))
+    clf = AdaBoost(n_estimators=10, learning_rate=0.2)
+    clf.fit(X_train, y_train)
+    print(clf.score(X_test, y_test))
